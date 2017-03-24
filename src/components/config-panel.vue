@@ -53,7 +53,7 @@ export default {
                 return;
             }
             let reader = new FileReader();
-            reader.readAsText(file);
+            reader.readAsText(file, 'utf-8');
             reader.onload = (rev) => {
                 let text = rev.target.result;
                 let lines = text.split('\n');
