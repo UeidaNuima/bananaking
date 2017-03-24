@@ -5,7 +5,7 @@ module.exports = {
     entry: './src/main.js',
     output: {
         path: path.resolve(__dirname, './dist'),
-        publicPath: '/dist/',
+        publicPath: 'dist/',
         filename: 'build.js'
     },
     module: {
@@ -35,7 +35,7 @@ module.exports = {
             },
             {
                 test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
-                loader: 'url-loader?limit=30000&name=[name]-[hash].[ext]'
+                loader: 'file-loader'
             }
         ]
     },
