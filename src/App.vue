@@ -6,6 +6,9 @@
     </mu-drawer> -->
     <mu-appbar title="香蕉王">
         <mu-icon-button icon="menu" slot="left" @click="/*drawerOpened = true*/" />
+        <mu-icon-button slot="right" href="https://github.com/moondropx/bananaking">
+            <i class="fa fa-github"></i>
+        </mu-icon-button>
     </mu-appbar>
     <config-panel :initChooseNum="chooseNum" :initRepeatEnabled="repeatEnabled" :initWeightEnabled="weightEnabled" :initOptionSum="options.length" />
     <data-container :initRepeatEnabled="repeatEnabled" :initWeightEnabled="weightEnabled" :initOptions="options" :initResults="results"/>
@@ -39,5 +42,4 @@ export default {
 </script>
 
 <style>
-
 </style>
