@@ -19,7 +19,7 @@
                     </mu-tr>
                 </mu-thead>
                 <mu-tbody>
-                    <mu-tr v-for="item, index in options" :key="index + item.name">
+                    <mu-tr v-for="item, index in options" :key="index + item.id">
                         <template v-if="!editEnabled || !(selectedRows.indexOf(index)!=-1)">
                             <mu-td>{{item.name}}</mu-td>
                             <mu-td v-if="weightEnabled">{{item.weight}}</mu-td>
@@ -69,7 +69,8 @@ export default {
             addEnabled: false,
             addItem:{
                 name:'',
-                weight: 1
+                weight: 1,
+                id: Math.random()
             },
             toast: false
         }
@@ -85,6 +86,11 @@ export default {
             this.activeTab = value;
         },
         hanldeRowSelect(selectedRowsIndex){
+            // 被删掉的行依然会留在选择中，然而index是个-1，这tm是bug吧
+            for(let i=0; i<selectedRowsIndex.length;i++)
+                if(selectedRowsIndex[i] == -1){
+                    selectedRowsIndex.splice(i, 1);
+                }
             this.selectedRows = selectedRowsIndex;
         },
         chooseBananas(num) {
@@ -167,6 +173,10 @@ export default {
             localStorage.results = JSON.stringify(this.results);
             this.showToast();
         });
+        for(let i=0; i<this.options.length; i++){
+            if(!this.options[i]['id'])
+                this.options[i]['id'] = Math.random();
+        }
     }
 }
 </script>
