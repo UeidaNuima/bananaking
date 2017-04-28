@@ -62,11 +62,15 @@ export default {
                     line = line.split(',');
                     let name = line[0];
                     let weight = 1;
-                    if(line.length > 1)
+                    if(line.length > 1){
                         weight = Number(line[1]);
+                        if(!weight || weight < 0)
+                            weight = 1;
+                    }
                     result.push({
                         name: name,
-                        weight: weight
+                        weight: weight,
+                        id: Math.random()
                     });
                 });
                 Bus.$emit('optionChanged', result);

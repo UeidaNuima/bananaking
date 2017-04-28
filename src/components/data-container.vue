@@ -148,6 +148,8 @@ export default {
         addEnabled: function(newValue, oldValue) {
             if(newValue === false){
                 if(this.addItem.name != ''){
+                    if(!this.addItem.weight || this.addItem.weight < 0)
+                        this.addItem.weight = 1
                     this.options.unshift({
                         name: this.addItem.name,
                         weight: this.addItem.weight,
@@ -156,6 +158,13 @@ export default {
                 }
                 this.addItem.name = '';
                 this.addItem.weight = 1;
+            }
+        },
+        editEnabled: function(newValue, oldValue) {
+            if(newValue === false && this.selectedRows.length > 0){
+                let index = this.selectedRows[0];
+                if(!this.options[index].weight || this.options[index].weight < 0)
+                    this.options[index].weight = 1;
             }
         }
     },
