@@ -19,6 +19,14 @@
                     </mu-tr>
                 </mu-thead>
                 <mu-tbody>
+                    <mu-tr v-if="addEnabled" :selectable="false">
+                        <mu-td>
+                            <mu-text-field v-model="addItem.name" fullWidth/>
+                        </mu-td>
+                        <mu-td v-if="weightEnabled">
+                            <mu-text-field v-model.number="addItem.weight"  type="number" fullWidth/>
+                        </mu-td>
+                    </mu-tr>
                     <mu-tr v-for="item, index in options" :key="index + item.id">
                         <template v-if="!editEnabled || !(selectedRows.indexOf(index)!=-1)">
                             <mu-td>{{item.name}}</mu-td>
@@ -32,14 +40,6 @@
                                 <mu-text-field v-model.number="item.weight" type="number" fullWidth/>
                             </mu-td>
                         </template>
-                    </mu-tr>
-                    <mu-tr v-if="addEnabled" :selectable="false">
-                        <mu-td>
-                            <mu-text-field v-model="addItem.name" fullWidth/>
-                        </mu-td>
-                        <mu-td v-if="weightEnabled">
-                            <mu-text-field v-model.number="addItem.weight"  type="number" fullWidth/>
-                        </mu-td>
                     </mu-tr>
                 </mu-tbody>
             </mu-table>
@@ -69,8 +69,7 @@ export default {
             addEnabled: false,
             addItem:{
                 name:'',
-                weight: 1,
-                id: Math.random()
+                weight: 1
             },
             toast: false
         }
@@ -149,9 +148,10 @@ export default {
         addEnabled: function(newValue, oldValue) {
             if(newValue === false){
                 if(this.addItem.name != ''){
-                    this.options.push({
+                    this.options.unshift({
                         name: this.addItem.name,
-                        weight: this.addItem.weight
+                        weight: this.addItem.weight,
+                        id: Math.random()
                     });
                 }
                 this.addItem.name = '';
