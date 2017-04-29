@@ -16,6 +16,7 @@
                 <input type="file" class="file-button" @change='fileHandle'>
             </mu-raised-button>
             <mu-raised-button @click="saveState" label="保存" />
+            <mu-raised-button @click="clear" label="清空" primary/>
             <mu-switch class="reverse btn" v-model="weightEnabled" label="权重" @change='weightHandle'/>
         </mu-content-block>
     </div>
@@ -87,6 +88,9 @@ export default {
             localStorage.repeatEnabled = this.repeatEnabled;
             localStorage.chooseNum = this.chooseNum;
             Bus.$emit('saveState');
+        },
+        clear(){
+            Bus.$emit('clear');
         }
     },
     created: function() {

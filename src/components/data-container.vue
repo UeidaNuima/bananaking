@@ -7,7 +7,7 @@
         </mu-tabs>
         <div v-show="activeTab === 'alternative'">
             <mu-content-block>
-                <mu-raised-button @click="deleteItems" :disabled="!selectedRows.length || editEnabled || addEnabled" label="删除" secondary/>
+                <mu-raised-button @click="deleteItem" :disabled="!selectedRows.length || editEnabled || addEnabled" label="删除" secondary/>
                 <mu-raised-button :disabled="editEnabled" @click="addEnabled = !addEnabled" :label="addEnabled?'保存':'增加'" primary/>
                 <mu-raised-button @click="editEnabled = !editEnabled" :disabled="selectedRows.length!=1 || addEnabled" :label="editEnabled?'保存':'编辑'" primary/>
             </mu-content-block>
@@ -45,6 +45,10 @@
             </mu-table>
         </div>
         <div v-show="activeTab === 'result'">
+            <mu-content-block>
+                <mu-raised-button :disabled="!results.length" @click="exportResult" label="导出" primary/>
+                <a id="export" download="export.txt" :href="resultBlobUrl">export.txt</a>
+            </mu-content-block>
             <mu-list>
                 <mu-list-item v-for="result, index in results" :title="result" :key="index">
                 </mu-list-item>
@@ -77,6 +81,10 @@ export default {
     computed: {
         focused: function(){
             return this.editEnabled || this.addEnabled;
+        },
+        resultBlobUrl: function(){
+            let blob = new Blob([this.results.join('\n')], {type: 'text/plain,charset=UTF-8'});
+            return URL.createObjectURL(blob);
         }
     },
     props: ['initRepeatEnabled', 'initWeightEnabled', 'initOptions', 'initResults'],
@@ -128,7 +136,7 @@ export default {
                 name: options[goal].name
             };
         },
-        deleteItems() {
+        deleteItem() {
             if(confirm('ふっざけんな！やめろバカ！ﾎﾟｲﾃｰﾛ!')){
                 for(let index = this.selectedRows.length - 1; index>=0; index--)
                     this.options.splice(this.selectedRows[index], 1);
@@ -139,6 +147,14 @@ export default {
             this.toast = true;
             if (this.toastTimer) clearTimeout(this.toastTimer);
             this.toastTimer = setTimeout(() => { this.toast = false }, 2000);
+        },
+        clear() {
+            this.results = [];
+            this.options = [];
+            this.selectedRows = [];
+        },
+        exportResult() {
+            document.getElementById('export').click();
         }
     },
     watch: {
@@ -181,6 +197,8 @@ export default {
             localStorage.options = JSON.stringify(this.options);
             localStorage.results = JSON.stringify(this.results);
             this.showToast();
+        }).$on('clear', () => {
+            this.clear();
         });
         for(let i=0; i<this.options.length; i++){
             if(!this.options[i]['id'])
@@ -191,4 +209,7 @@ export default {
 </script>
 
 <style lang="css">
+    #export {
+        display: none;
+    }
 </style>
